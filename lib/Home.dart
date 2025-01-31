@@ -1,20 +1,27 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:poject_clone1/models/category_model.dart';
+import 'package:poject_clone1/models/diet_model.dart';
 
  class HomePage extends StatelessWidget {
    HomePage({super.key}); // Add const here
 
   List<CategoryModel> categories = [];
+  List<DietModel> diets = [];
 
   void _getCategories () {
       categories =  CategoryModel.getCategories();
+  }
+
+  void _getDiets () {
+      diets = DietModel.getDietModel();
   }
 
 
   @override
   Widget build(BuildContext context) {
     _getCategories();
+    _getDiets();
       return Scaffold(
         backgroundColor: Colors.white,
         appBar: AppBar(
@@ -149,18 +156,86 @@ import 'package:poject_clone1/models/category_model.dart';
               child: ListView.separated(
                 itemCount: categories.length,
                 scrollDirection: Axis.horizontal,
+                padding: EdgeInsets.only(
+                  left: 20,
+                  right: 20
+                ),
                 separatorBuilder: (content, index) => SizedBox(width: 25,),
                 itemBuilder: (context, index) {
                     return Container(
                       width: 100,
+                      // height: 20,
                       decoration: BoxDecoration(
                         // color: ((categories[index].boxColor)),
-                        color: categories[index].boxColor
+                        color: categories[index].boxColor.withOpacity(0.3),
+                        borderRadius: BorderRadius.circular(13),
+                      ),
+                      child: Column(
+                        mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                        children: [
+                          Container(
+                            width: 50,
+                            height: 50,
+                            decoration: BoxDecoration(
+                              color: Colors.white,
+                              shape: BoxShape.circle
+                            ),
+                            child: Padding(
+                               padding: EdgeInsets.all(8.0),
+                              //  child: SvgPicture.asset(categories[index].iconPath),
+                               ),
+                          ),
+                          Text(
+                            categories[index].name,
+                            style: TextStyle(
+                              fontWeight: FontWeight.w300,
+                              color: Colors.black,
+                              fontSize: 14,
+
+                            ),
+                          )
+                        ],
                       ),
                     );
                 }
                 ),
-            )
+            ),
+            SizedBox(height: 14,),
+             Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+               children: [
+                Padding(
+                  padding: EdgeInsets.all(8.0),
+                   child: Text(
+                  'Recommendations\n for diets',
+                  style:TextStyle(
+                    color: Colors.black,
+                    fontSize: 16,
+                    fontWeight: FontWeight.w600,
+                 ),
+                ),
+                  ),
+                  SizedBox(height: 4),
+                  Container(
+                    color: Colors.blue,
+                    height: 240,
+                    child: ListView.separated(
+                      itemBuilder: (content, index){
+                        return Container(
+                          width: 210,
+                          decoration: BoxDecoration(
+                            color: diets[index].boxColor,
+                            borderRadius: BorderRadius.circular(4)
+                          ),
+                        );
+                      }, 
+                      separatorBuilder: (content, index) =>  SizedBox(width: 15), 
+                      itemCount: diets.length,
+                      scrollDirection: Axis.horizontal,
+                      ),
+                  )
+               ],
+             )
               ],
             )
           ],
